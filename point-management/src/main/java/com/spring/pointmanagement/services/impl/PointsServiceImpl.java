@@ -29,6 +29,8 @@ public class PointsServiceImpl implements PointsService{
 	@Override
 	public Point savePoint(PointDto pointDto) throws ApplicationException {
 		try {
+//			Point savedPoint = pointsRepository.getPointByLocationTime(pointDto.getMeasurementLocation().toString(), pointDto.getMeasurementYear());
+			
 			Point point = new Point();
 			point.setMeasurementLocation(pointDto.getMeasurementLocation());
 			point.setMeasurementValue(pointDto.getMeasurementValue());

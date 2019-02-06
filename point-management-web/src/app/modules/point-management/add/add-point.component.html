@@ -4,15 +4,19 @@
 
     <div class="form-group" [class.has-error]="dataForm.form.controls.measurementLocation?.invalid">
       <label for="measurementLocation">Measurement Location:</label>
-      <input type="text" [(ngModel)]="point.measurementLocation" placeholder="Location" name="measurementLocation" class="form-control" id="measurementLocation">
+      <select [(ngModel)]="point.measurementLocation" placeholder="Location" name="measurementLocation" class="form-control" id="measurementLocation" required>
+          <option *ngFor="let location of locationTypes" [ngValue]="location">
+              {{location}}
+          </option>
+      </select>
     </div>
     <div class="form-group" [class.has-error]="dataForm.form.controls.measurementYear?.invalid">
       <label for="measurementYear">Measurement Date:</label>
-      <input type="date" [(ngModel)]="point.measurementYear" placeholder="Measurement Year" name="measurementYear" class="form-control" id="measurementYear">
+      <input type="date" [(ngModel)]="point.measurementYear" placeholder="Measurement Year" name="measurementYear" class="form-control" id="measurementYear" required>
     </div>
     <div class="form-group" [class.has-error]="dataForm.form.controls.measurementValue?.invalid">
       <label for="measurementValue">Measurement Value:</label>
-      <input type="text" [(ngModel)]="point.measurementValue" placeholder="Value" pattern="\d+(\.\d{1,2})?" name="measurementValue" class="form-control" id="measurementValue">
+      <input type="text" [(ngModel)]="point.measurementValue" placeholder="Value" pattern="\d+(\.\d{1,2})?" name="measurementValue" class="form-control" id="measurementValue" required>
     </div>
 
     <button class="btn btn-success" (click)="savePoint(point)" [disabled]="dataForm.invalid || !dataForm.touched">Create</button>
