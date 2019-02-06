@@ -1,0 +1,26 @@
+
+<div class="col-md-8">
+<h2> List Points</h2>
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Id</th>
+    <th>Measurement Location</th>
+    <th>Measurement Date</th>
+    <th>Measurement Value</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr *ngFor="let point of points; let i= index">
+    <td>{{point.id}}</td>
+    <td>{{point.measurementLocation}}</td>
+    <td>{{point.measurementYear | date : 'MM/dd/yyyy'}}</td>
+    <td>{{point.measurementValue}}</td>
+    <td>
+      <button class="btn btn-danger" (click)="deletePoint(point.id, i)"> Delete</button>
+    </td>
+  </tr>
+  </tbody>
+</table>
+</div>
