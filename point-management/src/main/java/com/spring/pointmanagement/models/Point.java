@@ -20,7 +20,7 @@ public class Point {
 	private int id;
 
 	@Column(name = "measurement_value")
-	private String measurementValue;
+	private Double measurementValue;
 
 	@Column(name = "measurement_location")
 	private LocationTypes measurementLocation;
@@ -36,11 +36,11 @@ public class Point {
 		this.id = id;
 	}
 
-	public String getMeasurementValue() {
+	public Double getMeasurementValue() {
 		return measurementValue;
 	}
 
-	public void setMeasurementValue(String measurementValue) {
+	public void setMeasurementValue(Double measurementValue) {
 		this.measurementValue = measurementValue;
 	}
 

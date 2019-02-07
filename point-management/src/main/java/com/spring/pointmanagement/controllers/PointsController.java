@@ -2,8 +2,11 @@ package com.spring.pointmanagement.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.spring.pointmanagement.exceptions.ApplicationException;
+import com.spring.pointmanagement.exceptions.BadRequestException;
 import com.spring.pointmanagement.models.Point;
 import com.spring.pointmanagement.models.PointDto;
 import com.spring.pointmanagement.models.ResponseObject;
@@ -33,7 +37,10 @@ public class PointsController {
     }
     
     @PostMapping
-    public ResponseObject<Point> savePoint(@RequestBody PointDto point) throws ApplicationException{
+    public ResponseObject<Point> savePoint(@Valid @RequestBody PointDto point, BindingResult result) throws ApplicationException{
+    	if(result.hasErrors()) {
+    		throw new BadRequestException(result.getFieldErrors().get(0).getDefaultMessage());
+    	}
         return new ResponseObject<Point>(HttpStatus.OK.value(), "Points saved successfully.", pointsService.savePoint(point));
     }
     
