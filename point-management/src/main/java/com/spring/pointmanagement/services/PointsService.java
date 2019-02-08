@@ -1,6 +1,5 @@
 package com.spring.pointmanagement.services;
 
-import java.sql.SQLDataException;
 import java.util.List;
 
 import com.spring.pointmanagement.enums.LocationTypes;

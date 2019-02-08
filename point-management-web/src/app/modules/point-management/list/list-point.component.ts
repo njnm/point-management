@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 
 import { PointManagementService } from '../point-management.service';
 import { Points } from 'src/app/models/points.model';
+import { PointSummary } from 'src/app/models/point-summary.model';
 
 @Component({
   selector: 'list-point',
@@ -12,6 +13,8 @@ import { Points } from 'src/app/models/points.model';
 export class ListPointsComponent implements OnInit {
 
   points: Points[] = [];
+
+  pointSummary : PointSummary = new PointSummary();
 
   locationTypes = ["EE", "FI", "LI"];
 
@@ -23,6 +26,7 @@ export class ListPointsComponent implements OnInit {
   
   ngOnInit() {
     this.getPoints('EE');
+    this.getPointSummary();
   };
 
   getPoints(location){
@@ -31,6 +35,15 @@ export class ListPointsComponent implements OnInit {
       this.points = response.result;
     }, (err) => {
       alert("Failed to load Points. Please try again")
+    })
+  }
+
+  getPointSummary(){
+    this.pointManagementService.getPointSummary().
+    subscribe((response : any) => {
+      this.pointSummary = response.result;
+    }, (err)=> {
+
     })
   }
 

@@ -7,10 +7,15 @@ export class PointManagementService {
   constructor(private http:HttpClient) {}
 
   private url = 'http://localhost:8080/points';
+  private summaryUrl = 'http://localhost:8080/summary';
   //private userUrl = '/api';
 
   public getPoints(location) {
     return this.http.get(this.url + `/${location}`);
+  }
+
+  public getPointSummary() {
+    return this.http.get(this.summaryUrl);
   }
 
   public savePoint(point) {
