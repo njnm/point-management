@@ -13,18 +13,26 @@ export class ListPointsComponent implements OnInit {
 
   points: Points[] = [];
 
+  locationTypes = ["EE", "FI", "LI"];
+
+  selectedLocation : string = "EE";
+
   constructor(private router: Router, private pointManagementService: PointManagementService) {
 
   }
   
   ngOnInit() {
-    this.pointManagementService.getPoints().
+    this.getPoints('EE');
+  };
+
+  getPoints(location){
+    this.pointManagementService.getPoints(location).
     subscribe((response : any) => {
       this.points = response.result;
     }, (err) => {
-
+      alert("Failed to load Points. Please try again")
     })
-  };
+  }
 
   deletePoint(id, index) {
     this.pointManagementService.deletePoint(id).

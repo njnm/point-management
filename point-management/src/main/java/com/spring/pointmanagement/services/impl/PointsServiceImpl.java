@@ -5,9 +5,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.spring.pointmanagement.enums.LocationTypes;
 import com.spring.pointmanagement.exceptions.ApplicationException;
 import com.spring.pointmanagement.models.Point;
 import com.spring.pointmanagement.models.PointDto;
+import com.spring.pointmanagement.models.PointSummary;
 import com.spring.pointmanagement.repository.PointsRepository;
 import com.spring.pointmanagement.services.PointsService;
 
@@ -25,14 +27,22 @@ public class PointsServiceImpl implements PointsService{
 			throw new ApplicationException("Something went wrong.Please try again");
 		}
 	}
+	
+
+	@Override
+	public List<Point> getPointsByLocation(LocationTypes location) throws ApplicationException {
+		try {
+			return (List<Point>) pointsRepository.getPointByMeasurementLocation(location.toString());
+		}catch (Exception e) {
+			throw new ApplicationException("Something went wrong.Please try again");
+		}
+	}
 
 	@Override
 	public Point savePoint(PointDto pointDto) throws ApplicationException {
-		try {
-//			Point savedPoint = pointsRepository.getPointByLocationTime(pointDto.getMeasurementLocation().toString(), pointDto.getMeasurementYear());
-			
+		try {			
 			Point point = new Point();
-			point.setMeasurementLocation(pointDto.getMeasurementLocation());
+			point.setMeasurementLocation(pointDto.getMeasurementLocation().toString());
 			point.setMeasurementValue(pointDto.getMeasurementValue());
 			point.setMeasurementYear(pointDto.getMeasurementYear());
 			return pointsRepository.save(point);
@@ -46,6 +56,22 @@ public class PointsServiceImpl implements PointsService{
 		try {
 			pointsRepository.deleteById(id);
 			return true;
+		}catch (Exception e) {
+			throw new ApplicationException("Something went wrong.Please try again");
+		}
+	}
+
+	@Override
+	public PointSummary getPointSummary() throws ApplicationException {
+		try {
+			Object[] obj = pointsRepository.getPointSummary();
+			
+			PointSummary point = new PointSummary();
+//			point.setMinVal((Double) obj[0]);
+//			point.setMaxVal((Double) obj[1]);
+//			point.setSumVal((Double) obj[2]);
+//			point.setAvgVal((Double) obj[3]);
+			return point;
 		}catch (Exception e) {
 			throw new ApplicationException("Something went wrong.Please try again");
 		}

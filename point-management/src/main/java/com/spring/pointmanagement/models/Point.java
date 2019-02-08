@@ -23,7 +23,7 @@ public class Point {
 	private Double measurementValue;
 
 	@Column(name = "measurement_location")
-	private LocationTypes measurementLocation;
+	private String measurementLocation;
 
 	@Column(name = "measurement_year")
 	private Date measurementYear;
@@ -44,11 +44,11 @@ public class Point {
 		this.measurementValue = measurementValue;
 	}
 
-	public LocationTypes getMeasurementLocation() {
+	public String getMeasurementLocation() {
 		return measurementLocation;
 	}
 
-	public void setMeasurementLocation(LocationTypes measurementLocation) {
+	public void setMeasurementLocation(String measurementLocation) {
 		this.measurementLocation = measurementLocation;
 	}
 

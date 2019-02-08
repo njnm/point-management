@@ -9,8 +9,8 @@ export class PointManagementService {
   private url = 'http://localhost:8080/points';
   //private userUrl = '/api';
 
-  public getPoints() {
-    return this.http.get(this.url);
+  public getPoints(location) {
+    return this.http.get(this.url + `/${location}`);
   }
 
   public savePoint(point) {

@@ -4,7 +4,8 @@ import { PointManagementService } from './point-management.service';
 
 @Component({
   selector: 'app-points',
-  templateUrl: './point-management.component.html'
+  templateUrl: './point-management.component.html',
+  styleUrls: ['./point-management.css']
 })
 export class PointManagementComponent implements OnInit {
 

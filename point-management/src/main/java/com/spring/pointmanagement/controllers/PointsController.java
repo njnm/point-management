@@ -10,12 +10,14 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring.pointmanagement.enums.LocationTypes;
 import com.spring.pointmanagement.exceptions.ApplicationException;
 import com.spring.pointmanagement.exceptions.BadRequestException;
 import com.spring.pointmanagement.models.Point;
@@ -34,6 +36,11 @@ public class PointsController {
     @GetMapping
     public ResponseObject<List<PointDto>> listPoints() throws ApplicationException{
         return new ResponseObject<List<PointDto>>(HttpStatus.OK.value(), "Points list fetched successfully.",pointsService.getPoints());
+    }
+    
+    @GetMapping("/{location}")
+    public ResponseObject<List<PointDto>> listPointByLocation(@PathVariable("location") LocationTypes location) throws ApplicationException{
+        return new ResponseObject<List<PointDto>>(HttpStatus.OK.value(), "Points list fetched successfullyabc.",pointsService.getPointsByLocation(location));
     }
     
     @PostMapping
