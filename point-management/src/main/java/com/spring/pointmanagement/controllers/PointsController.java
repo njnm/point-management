@@ -40,7 +40,7 @@ public class PointsController {
     
     @GetMapping("/{location}")
     public ResponseObject<List<PointDto>> listPointByLocation(@PathVariable("location") LocationTypes location) throws ApplicationException{
-        return new ResponseObject<List<PointDto>>(HttpStatus.OK.value(), "Points list fetched successfullyabc.",pointsService.getPointsByLocation(location));
+        return new ResponseObject<List<PointDto>>(HttpStatus.OK.value(), "Points list fetched successfully.",pointsService.getPointsByLocation(location));
     }
     
     @PostMapping

@@ -3,6 +3,8 @@ package com.spring.pointmanagement.services.impl;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import com.spring.pointmanagement.enums.LocationTypes;
@@ -40,13 +42,16 @@ public class PointsServiceImpl implements PointsService{
 
 	@Override
 	public Point savePoint(PointDto pointDto) throws ApplicationException {
-		try {			
+		try {
 			Point point = new Point();
 			point.setMeasurementLocation(pointDto.getMeasurementLocation().toString());
 			point.setMeasurementValue(pointDto.getMeasurementValue());
 			point.setMeasurementYear(pointDto.getMeasurementYear());
 			return pointsRepository.save(point);
 		}catch (Exception e) {
+			if(e instanceof DataIntegrityViolationException) {
+				throw new ApplicationException("Data for same location and date already exists");
+			}
 			throw new ApplicationException("Something went wrong.Please try again");
 		}
 	}
