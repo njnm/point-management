@@ -12,7 +12,7 @@
 	  <relativePath />
   </parent>
   <modules>
-   <module>point-management</module>
+    <module>point-management</module>
     <module>point-management-web</module>
   </modules>
   
