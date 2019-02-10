@@ -13,6 +13,8 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>point-management</name>
 	<description>Demo project for Spring Boot</description>
+	
+	<packaging>war</packaging>
 
 	<properties>
 		<java.version>1.8</java.version>
@@ -40,14 +42,57 @@
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+	
+		<build>
+        <plugins>
+			<plugin>
+			<artifactId>maven-resources-plugin</artifactId>
+			<executions>
+			      <execution>
+			          <id>copy-resources</id>
+			          <phase>validate</phase>
+			          <goals><goal>copy-resources</goal></goals>
+			          <configuration>
+			              <outputDirectory>${project.build.directory}/classes/resources/static</outputDirectory >
+			              <resources>
+			                  <resource>
+			                      <directory>${project.parent.basedir}/point-management-web/dist/point-management-web/</directory >
+			                  </resource>
+			              </resources>
+			          </configuration>
+			      </execution>
+			</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+			</plugin>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-surefire-plugin</artifactId>
+			</plugin>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-war-plugin</artifactId>
+		        <configuration>
+		          <packagingExcludes>WEB-INF/lib/tomcat-*.jar</packagingExcludes>
+		          <warName>point-management</warName>
+		        </configuration>
+      		</plugin>
+        </plugins>
+    </build>
 
-	<build>
+	<!-- <build>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
-	</build>
+	</build> -->
 
 </project>
