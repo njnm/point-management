@@ -34,7 +34,7 @@ export class ListPointsComponent implements OnInit {
     subscribe((response : any) => {
       this.points = response.result;
     }, (err) => {
-      alert("Failed to load Points. Please try again")
+      alert("Failed to load Points. Please try again");
     })
   }
 

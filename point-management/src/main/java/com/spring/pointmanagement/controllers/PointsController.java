@@ -35,12 +35,23 @@ public class PointsController {
 	
     @GetMapping
     public ResponseObject<List<PointDto>> listPoints() throws ApplicationException{
-        return new ResponseObject<List<PointDto>>(HttpStatus.OK.value(), "Points list fetched successfully.",pointsService.getPoints());
+    	List<Point> points = pointsService.getPoints();
+    	if(points.size() > 0) {
+            return new ResponseObject<List<PointDto>>(HttpStatus.OK.value(), "Points list fetched successfully.",points);
+    	}else {
+    		return new ResponseObject<List<PointDto>>(HttpStatus.NOT_FOUND.value(), "Points not found",points);
+    	}
     }
     
     @GetMapping("/{location}")
     public ResponseObject<List<PointDto>> listPointByLocation(@PathVariable("location") LocationTypes location) throws ApplicationException{
-        return new ResponseObject<List<PointDto>>(HttpStatus.OK.value(), "Points list fetched successfully.",pointsService.getPointsByLocation(location));
+        
+    	List<Point> points = pointsService.getPointsByLocation(location);
+    	if(points.size() > 0) {
+            return new ResponseObject<List<PointDto>>(HttpStatus.OK.value(), "Points list fetched successfully.",points);
+    	}else {
+    		return new ResponseObject<List<PointDto>>(HttpStatus.NOT_FOUND.value(), "Points not found.",points);
+    	}
     }
     
     @PostMapping

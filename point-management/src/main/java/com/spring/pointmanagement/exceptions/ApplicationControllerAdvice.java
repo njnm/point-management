@@ -15,7 +15,7 @@ public class ApplicationControllerAdvice extends ResponseEntityExceptionHandler 
 	@Override
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
-		return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, ex));
+		return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST, new Throwable(ex.getCause())));
 	}
 	
 	@ExceptionHandler(ApplicationException.class)

@@ -6,8 +6,8 @@ export class PointManagementService {
 
   constructor(private http:HttpClient) {}
 
-  private url = 'http://localhost:8080/points';
-  private summaryUrl = 'http://localhost:8080/summary';
+  private url = 'http://localhost:8080/pms/api/points';
+  private summaryUrl = 'http://localhost:8080/pms/api/summary';
   //private userUrl = '/api';
 
   public getPoints(location) {
