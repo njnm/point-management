@@ -60,7 +60,7 @@
 			              <outputDirectory>${project.build.directory}/classes/resources/static</outputDirectory >
 			              <resources>
 			                  <resource>
-			                      <directory>${project.parent.basedir}/point-management-web/dist/point-management-web/</directory >
+			                      <directory>${project.parent.basedir}/point-management-web/dist/</directory >
 			                  </resource>
 			              </resources>
 			          </configuration>
