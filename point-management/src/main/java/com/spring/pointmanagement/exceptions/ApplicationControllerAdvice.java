@@ -22,7 +22,7 @@ public class ApplicationControllerAdvice extends ResponseEntityExceptionHandler 
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		logger.error(ex.getCause());
-		return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST, new Throwable(ex.getCause())));
+		return buildResponseEntity(new ApiError(HttpStatus.BAD_REQUEST.value(), HttpStatus.BAD_REQUEST, new Throwable("Invalid Request. Please try again")));
 	}
 	
 	@ExceptionHandler(ApplicationException.class)
