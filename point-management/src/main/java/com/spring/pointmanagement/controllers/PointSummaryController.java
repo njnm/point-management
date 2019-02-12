@@ -1,5 +1,7 @@
 package com.spring.pointmanagement.controllers;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,12 +18,15 @@ import com.spring.pointmanagement.services.PointsService;
 @CrossOrigin
 @RequestMapping("/summary")
 public class PointSummaryController {
+	
+	private static final Logger logger = LogManager.getLogger(PointSummaryController.class);
 
 	@Autowired
 	private PointsService pointsService;
 	
     @GetMapping
     public ResponseObject<PointSummary> getPointSummary() throws ApplicationException{
+    	logger.info("Get Point Summary");
         return new ResponseObject<PointSummary>(HttpStatus.OK.value(), "Points sumamry fetched successfully.",pointsService.getPointSummary());
     }
 	

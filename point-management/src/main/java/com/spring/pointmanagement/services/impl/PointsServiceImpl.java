@@ -10,7 +10,9 @@ import com.spring.pointmanagement.enums.LocationTypes;
 import com.spring.pointmanagement.exceptions.ApplicationException;
 import com.spring.pointmanagement.models.Point;
 import com.spring.pointmanagement.models.PointDto;
+import com.spring.pointmanagement.models.PointHistory;
 import com.spring.pointmanagement.models.PointSummary;
+import com.spring.pointmanagement.repository.PointsHistoryRepository;
 import com.spring.pointmanagement.repository.PointsRepository;
 import com.spring.pointmanagement.services.PointsService;
 
@@ -19,6 +21,9 @@ public class PointsServiceImpl implements PointsService{
 	
 	@Autowired
 	private PointsRepository pointsRepository;
+	
+	@Autowired
+	private PointsHistoryRepository pointsHistoryRepository;
 
 	@Override
 	public List<Point> getPoints() throws ApplicationException {
@@ -44,9 +49,26 @@ public class PointsServiceImpl implements PointsService{
 		try {
 			Point point = new Point();
 			point.setMeasurementLocation(pointDto.getMeasurementLocation().toString());
-			point.setMeasurementValue(pointDto.getMeasurementValue());
 			point.setMeasurementYear(pointDto.getMeasurementYear());
-			return pointsRepository.save(point);
+			Point savedPointData = pointsRepository.getPointByLocationTime(pointDto.getMeasurementLocation().toString(), pointDto.getMeasurementYear());
+			if(savedPointData != null) {
+				point.setId(savedPointData.getId());
+				point.setMeasurementValue(pointDto.getMeasurementValue() + savedPointData.getMeasurementValue());
+			}else {
+				point.setMeasurementValue(pointDto.getMeasurementValue());
+			}
+			
+			savedPointData = pointsRepository.save(point);
+			
+			//saving the data to the history table
+			PointHistory pointHistory = new PointHistory();
+			pointHistory.setMeasurementLocation(pointDto.getMeasurementLocation().toString());
+			pointHistory.setMeasurementYear(pointDto.getMeasurementYear());
+			pointHistory.setMeasurementValue(pointDto.getMeasurementValue());
+			pointHistory.setId(savedPointData.getId());
+			pointsHistoryRepository.save(pointHistory);
+			
+			return savedPointData;
 		}catch (Exception e) {
 			if(e instanceof DataIntegrityViolationException) {
 				throw new ApplicationException("Data for same location and date already exists");
