@@ -1,66 +1,90 @@
 package com.spring.pointmanagement.controllers;
 
-import static org.junit.Assert.assertTrue;
-
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import org.junit.Before;
+import org.junit.Assert;
 import org.junit.Test;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.Mockito;
+import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 
-import com.spring.pointmanagement.AbstractTests;
+import com.spring.pointmanagement.enums.LocationTypes;
+import com.spring.pointmanagement.exceptions.ApplicationException;
 import com.spring.pointmanagement.models.Point;
+import com.spring.pointmanagement.models.PointDto;
+import com.spring.pointmanagement.models.ResponseObject;
+import com.spring.pointmanagement.services.PointsService;
 
-public class PointManagementControllerTests extends AbstractTests {
+@RunWith(MockitoJUnitRunner.class)
+public class PointManagementControllerTests {
 
-	@Override
-	@Before
-	public void setUp() {
-		super.setUp();
-	}
+	@InjectMocks
+	PointsController pointsController = new PointsController();
+	
+	@Mock
+	PointsService pointsService;
+	
+	@Mock
+	BindingResult bindingResult;
 	
 	@Test
-	public void createPoints() throws Exception {
-		String uri = "/points";
+	public void testGetPoints() throws ApplicationException {
+		List<Point> points = new ArrayList<>();
+		
+		Date testDate = new Date();
+		
 		Point point = new Point();
 		point.setMeasurementLocation("EE");
-		point.setMeasurementValue(100.0);
-		point.setMeasurementYear(new Date());
-		String inputJson = super.mapToJson(point);
-		MvcResult mvcResult = mvc.perform(
-				MockMvcRequestBuilders.post(uri).contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson))
-				.andReturn();
+		point.setMeasurementValue(10.5);
+		point.setMeasurementYear(testDate);
+		
+		points.add(point);
+		
+		ResponseObject<List<PointDto>> response = new ResponseObject<List<PointDto>>(HttpStatus.OK.value(), "Points list fetched successfully.",points);
+		
+		Mockito.when(pointsService.getPointsByLocation(Mockito.any(LocationTypes.class))).thenReturn(points);
 
-		int status = mvcResult.getResponse().getStatus();
-		assertTrue(200 == status);
+		Assert.assertTrue(pointsController.listPointByLocation(LocationTypes.EE).getStatus() == response.getStatus());
 	}
 	
 	@Test
-	public void createPointsError() throws Exception {
-		String uri = "/points";
-		Point point = new Point();
-		//setting an invalid location code should result in bad request
-		point.setMeasurementLocation("EI");
-		point.setMeasurementValue(100.0);
-		point.setMeasurementYear(new Date());
-		String inputJson = super.mapToJson(point);
-		MvcResult mvcResult = mvc.perform(
-				MockMvcRequestBuilders.post(uri).contentType(MediaType.APPLICATION_JSON_VALUE).content(inputJson))
-				.andReturn();
+	public void testGetPointsNoResult() throws ApplicationException {
+		List<Point> points = new ArrayList<>();
+		
+		ResponseObject<List<PointDto>> response = new ResponseObject<List<PointDto>>(HttpStatus.NOT_FOUND.value(), "Points not found.",points);
+		
+		Mockito.when(pointsService.getPointsByLocation(Mockito.any(LocationTypes.class))).thenReturn(points);
 
-		int status = mvcResult.getResponse().getStatus();
-		assertTrue(400 == status);
+		Assert.assertTrue(pointsController.listPointByLocation(LocationTypes.EE).getStatus() == response.getStatus());
 	}
-
+	
 	@Test
-	public void getPointsList() throws Exception {
-		String uri = "/points/EE";
-		MvcResult mvcResult = mvc.perform(MockMvcRequestBuilders.get(uri).accept(MediaType.APPLICATION_JSON_VALUE))
-				.andReturn();
+	public void testSavePoints() throws ApplicationException {
+		Date testDate = new Date();
+		
+		Point point = new Point();
+		point.setMeasurementLocation("EE");
+		point.setMeasurementValue(10.5);
+		point.setMeasurementYear(testDate);
+				
+		PointDto pointDto = new PointDto();
+		pointDto.setMeasurementLocation(LocationTypes.EE);
+		pointDto.setMeasurementValue(10.5);
+		pointDto.setMeasurementYear(testDate);
+		
+		ResponseObject<Point> response = new ResponseObject<Point>(HttpStatus.OK.value(), "Points saved successfully.", point);
+		
+		Mockito.when(pointsService.savePoint(Mockito.any(PointDto.class))).thenReturn(point);
+		Mockito.when(bindingResult.hasErrors()).thenReturn(false);
+		
+		ResponseObject<Point> mockResult = pointsController.savePoint(pointDto, bindingResult);
 
-		int status = mvcResult.getResponse().getStatus();
-		assertTrue(status == 200);
+		Assert.assertTrue(mockResult.getResult().equals(response.getResult()));
 	}
 }

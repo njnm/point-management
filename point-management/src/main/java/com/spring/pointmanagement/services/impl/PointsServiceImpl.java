@@ -59,6 +59,9 @@ public class PointsServiceImpl implements PointsService{
 			}
 			
 			savedPointData = pointsRepository.save(point);
+			if(savedPointData == null) {
+				throw new ApplicationException("Something went wrong while saving the record. Please try again");
+			}
 			
 			//saving the data to the history table
 			PointHistory pointHistory = new PointHistory();
